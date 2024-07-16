@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { connectDB } = require('./database/database.js');
-// const { authenticateUser } = require('./middlewares/authMiddleware.js');
+
 const handleErrors = require('./middlewares/error.middleware.js');
 const userRoutes = require('./routes/user.routes.js');
 const hrRoutes = require('./routes/hr.routes.js');
@@ -17,9 +17,7 @@ app.use(cors());
 connectDB();
 
 // Routes middleware
-// app.use('/api/users', authenticateUser, userRoutes);
-app.use('/api/users', userRoutes);
-
+app.use('/api/users', userRoutes); // Apply authMiddleware here
 app.use('/api/hr', hrRoutes);
 
 // Error handling middleware

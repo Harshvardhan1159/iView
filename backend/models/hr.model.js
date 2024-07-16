@@ -24,6 +24,10 @@ const hrSchema = new Schema({
     phoneNumber: {
       type: String,
       required: true
+    },
+    password: {
+      type: String,
+      required: true
     }
   },
   upcomingInterviews: [Interview.schema],  
