@@ -1,0 +1,28 @@
+const express = require('express');
+const cors = require('cors');
+const { connectDB } = require('./database/database.js');
+// const { authenticateUser } = require('./middlewares/authMiddleware.js');
+const handleErrors = require('./middlewares/error.middleware.js');
+const userRoutes = require('./routes/user.routes.js');
+const hrRoutes = require('./routes/hr.routes.js');
+
+const app = express();
+
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors());
+
+// Connect to MongoDB
+connectDB();
+
+// Routes middleware
+// app.use('/api/users', authenticateUser, userRoutes);
+app.use('/api/users', userRoutes);
+
+app.use('/api/hr', hrRoutes);
+
+// Error handling middleware
+app.use(handleErrors);
+
+module.exports = app;
