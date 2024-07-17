@@ -3,7 +3,7 @@ import React from 'react'
 const Navbar = () => {
   return (
     <>
-    <header class="bg-background w-full py-4 px-6 md:px-8 lg:px-10 shadow-sm">
+    <header class="bg-background fixed bg-gray-100 w-full py-4 px-6 md:px-8 lg:px-10 shadow-sm">
   <div class="container mx-auto flex items-center justify-between">
     <a class="flex items-center gap-2" href="#" rel="ugc">
       <svg

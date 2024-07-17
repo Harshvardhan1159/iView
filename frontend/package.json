@@ -10,10 +10,20 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.8.2",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@monaco-editor/react": "^4.6.0",
+    "axios": "^1.7.2",
     "firebase": "^10.12.3",
+    "framer-motion": "^11.3.5",
+    "konva": "^9.3.14",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.25.0"
+    "react-konva": "^18.2.10",
+    "react-router-dom": "^6.25.0",
+    "react-sketch-canvas": "^6.2.0",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
