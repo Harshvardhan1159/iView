@@ -4,8 +4,8 @@ const VideoCall = () => {
   return (
     <>
         <div class="flex w-full items-center overflow-hidden justify-center bg-muted">
-        <div class="flex flex-col w-full bg-gray-400 max-w-4xl grid-cols-2 gap-4 rounded-xl bg-background p-6 shadow-lg">
-            <div class="relative bg- h-[200px] w-full overflow-hidden rounded-lg">
+        <div class="flex flex-col w-full bg-gray-400 max-w-4xl grid-cols-2 gap-4 rounded-sm bg-background p-6 shadow-lg">
+            <div class="relative bg- h-[200px] w-full overflow-hidden rounded-sm">
                 <span class="h-full w-full object-cover rounded-md bg-muted"></span>
                 <div class="absolute inset-0 flex items-center justify-center bg-black/50">
                     <span class="relative flex h-[80px] w-[80px] shrink-0 overflow-hidden rounded-full border-4 border-background">
@@ -13,7 +13,7 @@ const VideoCall = () => {
                     </span>
                 </div>
             </div>
-            <div class="relative h-[200px] w-full overflow-hidden rounded-lg">
+            <div class="relative h-[200px] w-full overflow-hidden rounded-sm">
                 <span class="h-full w-full object-cover rounded-md bg-muted"></span>
                 <div class="absolute inset-0 flex items-center justify-center bg-black/50">
                     <span class="relative flex h-[80px] w-[80px] shrink-0 overflow-hidden rounded-full border-4 border-background">

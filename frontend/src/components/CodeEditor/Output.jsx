@@ -35,8 +35,9 @@ const Output = ({ editorRef, language }) => {
       <div
         className={`h-[50vh] p-2 border rounded text-white bg-[#222222] ${isError ? "text-red-400 border-red-500" : "border-gray-950"}`}
       >
+
         {output
-          ? output.map((line, i) => <p key={i}>{line}</p>)
+          ? output.map((line, i) => <p key={i}>&gt; {line}</p>)
           : 'Click "Run Code" to see the output here'}
       </div>
     </div>
