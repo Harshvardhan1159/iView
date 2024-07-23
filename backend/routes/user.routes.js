@@ -2,11 +2,23 @@ const express = require('express');
 const { validationResult } = require('express-validator');
 const { registerUser, loginUser, editUser } = require('../controllers/user.controller');
 const authMiddleware = require('../middlewares/userauth.middleware'); 
+const upload = require("../middlewares/multer.middleware")
 
 const router = express.Router();
 
-// POST /api/users/signup
-router.post('/signup', registerUser);
+router.route("/signup").post(
+    upload.fields([
+        {
+            name: "profilePicture",
+            maxCount: 1
+        },{
+            name: "resumePDF",
+            maxCount: 1
+        }
+    ]),
+    registerUser
+)
+
 
 // POST /api/users/login
 router.post('/login', loginUser);

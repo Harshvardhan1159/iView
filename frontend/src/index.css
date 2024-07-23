@@ -1,3 +1,100 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+*::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+* {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* Define custom scrollbar for specific elements */
+#customScrollbar::-webkit-scrollbar {
+    height: 10px;
+    width: 10px;
+}
+
+#customScrollbar::-webkit-scrollbar-track {
+    border-radius: 5px;
+    background-color: #DFE9EB;
+}
+
+#customScrollbar::-webkit-scrollbar-track:hover {
+    background-color: #B8C0C2;
+}
+
+#customScrollbar::-webkit-scrollbar-track:active {
+    background-color: #B8C0C2;
+}
+
+#customScrollbar::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background-color: #0E5081;
+}
+
+#customScrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: #2E62AC;
+}
+
+#customScrollbar::-webkit-scrollbar-thumb:active {
+    background-color: #0E5081;
+}
+
+/* Reset scrollbar styles for other elements */
+*:not(#customScrollbar)::-webkit-scrollbar {
+    display: none;
+}
+
+*:not(#customScrollbar) {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+
+:root {
+  --color-primary: #0E5081;
+  --color-secondary: #2E62AC;
+  --color-accent: #FFB800;
+  --color-background: #1A1A2E;
+  --color-card-background: #16213E;
+  --color-text: #EAEAEA;
+  --color-muted-text: #6B7280;
+  --color-error: #FF5A5F;
+}
+
+/* Example usage */
+.bg-primary {
+  background-color: var(--color-primary);
+}
+.text-primary {
+  color: var(--color-text);
+}
+.bg-secondary {
+  background-color: var(--color-secondary);
+}
+.text-secondary {
+  color: var(--color-secondary);
+}
+.bg-accent {
+  background-color: var(--color-accent);
+}
+.text-accent {
+  color: var(--color-accent);
+}
+.bg-background {
+  background-color: var(--color-background);
+}
+.bg-card {
+  background-color: var(--color-card-background);
+}
+.text-muted {
+  color: var(--color-muted-text);
+}
+.text-error {
+  color: var(--color-error);
+}

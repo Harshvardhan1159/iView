@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { Editor } from "@monaco-editor/react";
-import LanguageSelector from "./LanguageSelect";
-import { CODE_SNIPPETS } from "./constants";
+import LanguageSelector from "./utils/LanguageSelect";
+import { CODE_SNIPPETS } from "./utils/constants";
 import Output from "./Output";
 
 const CodeEditor = () => {
@@ -20,9 +20,9 @@ const CodeEditor = () => {
   };
 
   return (
-    <div className="p-4">
-      <div className="flex space-x-4">
-        <div className="w-1/2">
+    <div id="customScrollbar" className="p-4 overflow-y-scroll h-[78vh] ">
+      <div className="flex flex-col space-x-4">
+        <div className="w-full">
           <LanguageSelector language={language} onSelect={onSelect} />
           <Editor
             options={{

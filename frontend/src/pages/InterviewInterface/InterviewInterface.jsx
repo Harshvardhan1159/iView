@@ -1,21 +1,19 @@
 import React from 'react';
-import Whiteboard from '../../components/common/Whiteboard/WhiteboardContainer';
+import Whiteboard from '../../components/Whiteboard/WhiteboardContainer';
 import CodeEditor from '../../components/CodeEditor/CodeEditor';
-import VideoCall from '../../components/common/VideoCall/VideoCall';
+import VideoRoom from '../../components/VideoCall/VideoRoom';
+import VideoHome from '../../components/VideoCall/VideoHome';
 
-
-
-const InterviewInterface = () => {
+const InterviewInterface = ({ room }) => {
   return (
-    <div className="grid pt-16 grid-cols-[2.7fr_1.3fr] h-screen w-full">
-      <div className="bg-gray-700 flex justify-center items-center p-8">
+    <div className="grid grid-cols-[3.0fr_1.0fr] h-screen w-full">
+      <div className="bg-background flex justify-center items-center p-8">
         <div className="h-full w-full bg-gray-600">
-          {/* <Whiteboard /> */}
-          <CodeEditor/>
+          <CodeEditor />
         </div>
       </div>
-      <div className="bg-gray-200 flex justify-center items-center p-8">
-        <VideoCall/>
+      <div className="bg-background flex justify-center items-center p-8">
+        {room ? <VideoRoom /> : <VideoHome />}
       </div>
     </div>
   );

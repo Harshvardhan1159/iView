@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { executeCode } from "./api";
+import { executeCode } from "./utils/api";
 
 const Output = ({ editorRef, language }) => {
   const [output, setOutput] = useState(null);
@@ -23,7 +23,7 @@ const Output = ({ editorRef, language }) => {
   };
 
   return (
-    <div className="w-1/2">
+    <div className="w-full pr-8">
       <p className="mb-2 text-lg text-gray-200">Output</p>
       <button
         className={`px-4 py-2 mb-4 text-white bg-green-600 rounded hover:bg-green-700 focus:outline-none ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
@@ -33,7 +33,7 @@ const Output = ({ editorRef, language }) => {
         {isLoading ? "Running..." : "Run Code"}
       </button>
       <div
-        className={`h-[50vh] p-2 border rounded text-white bg-[#222222] ${isError ? "text-red-400 border-red-500" : "border-gray-950"}`}
+        className={`h-[50vh] p-2 border rounded overflow-y-scroll text-white bg-[#222222] ${isError ? "text-red-400 border-red-500" : "border-gray-950"}`}
       >
 
         {output
