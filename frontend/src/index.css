@@ -57,11 +57,12 @@
 
 
 :root {
-  --color-primary: #0E5081;
-  --color-secondary: #2E62AC;
+  --color-primary: #2E62AC;
+  --color-secondary: #A5D7E8;
   --color-accent: #FFB800;
-  --color-background: #1A1A2E;
-  --color-card-background: #16213E;
+  /* --color-background: #1A1A2E; */
+  --color-background: #0B2447;
+  --color-card-background: #F0EBD8;
   --color-text: #EAEAEA;
   --color-muted-text: #6B7280;
   --color-error: #FF5A5F;

@@ -2,24 +2,34 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const interviewSchema = new Schema({
-  userId: {
-    type: Schema.Types.ObjectId,
-    ref: 'User'
+  intervieweeEmail: {
+    type: String,
+    required: true
   }, 
-  hrId: {
+  interviewier: {
     type: Schema.Types.ObjectId,
-    ref: 'HR'
+    ref: 'HR',
+    required: true
   },
   status: {
     type: String,
     enum: ['Completed', 'Missed', 'Upcoming'],
     required: true
   },
+  position:{
+    type:String,
+    required: true,
+  },
   reportPDF: {
     type: String  
   },
-  dateOfCompletion: {
-    type: Date
+  date: {
+    type: Date,
+    required: true
+  },
+  time:{
+    type: String,
+    required: true
   },
   createdAt: {
     type: Date,

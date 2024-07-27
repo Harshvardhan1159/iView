@@ -1,10 +1,20 @@
 const express = require('express');
-const router = express.Router();
 const { registerHR, loginHR, editHR } = require('../controllers/hr.controller');
-const authMiddleware = require('../middlewares/hrAuth.middleware');
+const authMiddleware = require('../middlewares/hrauth.middleware'); // Middleware for HR authentication
+const upload = require("../middlewares/multer.middleware");
+
+const router = express.Router();
 
 // POST /api/hr/signup
-router.post('/signup', registerHR);
+router.post('/signup', 
+    upload.fields([
+        {
+            name: "profilePicture",
+            maxCount: 1
+        }
+    ]),
+    registerHR
+);
 
 // POST /api/hr/login
 router.post('/login', loginHR);

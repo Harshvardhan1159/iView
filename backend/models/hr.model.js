@@ -7,7 +7,7 @@ const hrSchema = new Schema({
     type: String,
     required: true
   },
-  logo: {
+  profilePicture: {
     type: String, 
     required: true
   },

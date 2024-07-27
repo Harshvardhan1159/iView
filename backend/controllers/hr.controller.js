@@ -1,127 +1,138 @@
-const HR = require('../models/hr.model');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const HR = require('../models/hr.model');
+const { uploadOnCloudinary } = require("../utils/Cloudinary/cloudinary");
+require('dotenv').config();
 
-// Register HR
+// Function to register a new HR
 const registerHR = async (req, res) => {
-  const { companyName, logo, name, email, phoneNumber, password } = req.body;
+  const profilePicture = req.files?.profilePicture?.[0]?.path;
+  const { companyName, name, email, phoneNumber, password } = req.body;
 
   try {
-    // Check if HR already exists
+    // Check if HR with the same email exists
     let hr = await HR.findOne({ 'hrManager.email': email });
     if (hr) {
-      return res.status(400).json({ message: 'HR already exists' });
+      return res.status(400).json({ message: 'HR already exists with this email' });
     }
 
-    // Create new HR
+    // Upload profile picture to Cloudinary
+    let profilePictureUrl = '';
+    if (profilePicture) {
+      const result = await uploadOnCloudinary(profilePicture);
+      profilePictureUrl = result.secure_url;
+    }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create a new HR
     hr = new HR({
       companyName,
-      logo,
+      profilePicture: profilePictureUrl,
       hrManager: {
         name,
         email,
         phoneNumber,
-        password
-      },
+        password: hashedPassword
+      }
     });
 
-    // Hash password
-    const salt = await bcrypt.genSalt(10);
-    hr.hrManager.password = await bcrypt.hash(password, salt);
-
-    // Save HR
+    // Save the HR to the database
     await hr.save();
 
-    // Generate JWT
-    const payload = {
-      hr: {
-        id: hr.id
-      }
-    };
-
-    jwt.sign(
-      payload,
-      process.env.JWT_SECRET,
-      { expiresIn: 3600 },
-      (err, token) => {
-        if (err) throw err;
-        res.json({ token, hr});
-      }
-    );
-  } catch (err) {
-    console.error('Error registering HR:', err);
-    res.status(500).json({ message: 'Server error'
+    // Return success response
+    res.status(201).json({ 
+        message: 'HR registered successfully',
+        hr 
     });
+  } catch (err) {
+    console.error('Error in HR registration:', err);
+    res.status(500).json({ message: 'Server error' });
   }
 };
 
-// Login HR
+// Function to login an HR
 const loginHR = async (req, res) => {
   const { email, password } = req.body;
 
   try {
+    // Check if email and password are provided
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Please provide both email and password' });
+    }
+
     // Check if HR exists
-    const hr = await HR.findOne({ 'hrManager.email': email });
+    let hr = await HR.findOne({ 'hrManager.email': email });
     if (!hr) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // Check password
+    // Compare passwords
     const isMatch = await bcrypt.compare(password, hr.hrManager.password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // Generate JWT
+    // Create JWT token
     const payload = {
       hr: {
-        id: hr.id
-      }
+        id: hr.id,
+      },
     };
 
     jwt.sign(
       payload,
       process.env.JWT_SECRET,
-      { expiresIn: 3600 },
+      { expiresIn: '1h' },
       (err, token) => {
         if (err) throw err;
-        res.json({ token });
+        // Set the token in a cookie
+        res.cookie('authToken', token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'Strict',
+        });
+        res.json({ "message": "HR Logged In Successfully" });
       }
     );
   } catch (err) {
-    console.error('Error logging in HR:', err);
+    console.error('Error in HR login:', err);
     res.status(500).json({ message: 'Server error' });
   }
 };
 
-// Edit HR Details
+// Function to edit HR details
 const editHR = async (req, res) => {
-  const { companyName, logo, name, email, phoneNumber, password } = req.body;
+  const { companyName, profilePicture, name, email, phoneNumber } = req.body;
 
   try {
-    const hr = await HR.findById(req.hr.id);
+    // Fetch HR from database
+    let hr = await HR.findById(req.hr.id);
 
     if (!hr) {
       return res.status(404).json({ message: 'HR not found' });
     }
 
+    // Update HR details
     hr.companyName = companyName || hr.companyName;
-    hr.logo = logo || hr.logo;
+    hr.profilePicture = profilePicture || hr.profilePicture;
     hr.hrManager.name = name || hr.hrManager.name;
     hr.hrManager.email = email || hr.hrManager.email;
     hr.hrManager.phoneNumber = phoneNumber || hr.hrManager.phoneNumber;
 
-    if (password) {
-      const salt = await bcrypt.genSalt(10);
-      hr.hrManager.password = await bcrypt.hash(password, salt);
-    }
-
+    // Save updated HR
     await hr.save();
-    res.json({ message: 'HR updated successfully', hr });
-  } catch (err) {
-    console.error('Error updating HR:', err);
+
+    res.status(200).json({ message: 'HR details updated successfully', hr });
+  } catch (error) {
+    console.error('Error updating HR:', error);
     res.status(500).json({ message: 'Server error' });
   }
 };
 
-module.exports = { registerHR, loginHR, editHR };
+module.exports = {
+  registerHR,
+  loginHR,
+  editHR,
+};

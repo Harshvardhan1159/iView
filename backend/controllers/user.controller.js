@@ -5,6 +5,22 @@ const User = require('../models/user.model');
 const { uploadOnCloudinary } = require("../utils/Cloudinary/cloudinary");
 const { uploadFileOnFireBase } = require('../utils/Firebase/firebase');
 require('dotenv').config();
+const cookieParser = require('cookie-parser');
+
+// Function to get User Details
+const getUser = async(req,res)=>{
+
+  try {
+    const user = req.user.toObject();
+    delete user.password;
+    delete user._id;
+    delete user.__v;
+    res.json(user);
+  } catch (error) {
+    res.status(401).json({ message: 'Unauthorized' });
+  }
+}
+
 
 // Function to register a new user
 const registerUser = async (req, res) => {
@@ -15,9 +31,15 @@ const registerUser = async (req, res) => {
 
   try {
     // Check if user with the same email exists
-    let user = await User.findOne({ email });
+    let user = await User.findOne({
+      $or: [
+        { email: email },
+        { phoneNumber: phoneNumber }
+      ]
+    });
+    
     if (user) {
-      return res.status(400).json({ message: 'User already exists with this email' });
+      return res.status(400).json({ message: 'User already exists with this email or Phone Number' });
     }
 
     // Upload profile picture to Cloudinary
@@ -102,7 +124,13 @@ const loginUser = async (req, res) => {
       { expiresIn: '1h' },
       (err, token) => {
         if (err) throw err;
-        res.json({ token });
+        // Set the token in a cookie
+        res.cookie('authToken', token, {
+          // httpOnly: true, // Cookie is not accessible via JavaScript
+          secure: process.env.NODE_ENV === 'production', // Set to true in production
+          sameSite: 'Strict', // Mitigates CSRF attacks
+        });
+        res.json({ "message":"User Logged In Successfully" });
       }
     );
   } catch (err) {
@@ -149,6 +177,7 @@ const editUser = async (req, res) => {
 };
 
 module.exports = {
+  getUser,
   registerUser,
   loginUser,
   editUser,

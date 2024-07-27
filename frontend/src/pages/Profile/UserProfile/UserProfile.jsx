@@ -1,117 +1,164 @@
-import React from 'react'
+import React, { useState } from 'react';
+import { getUser } from '../../../api/users/userAPI';
+import { useNavigate } from 'react-router-dom';
+import ErrorNotification from '../../../components/Notification/ErrorNotification/ErrorNotification';
+import UpdateProfile from '../../../components/UpdateProfile/UpdateProfile';
+
 
 const UserProfile = () => {
+  const navigate = useNavigate();
+  const [username,setUsername]= useState("username");
+  const [email,setEmail]= useState("email");
+  const [phoneNumber,setPhoneNumber]= useState("phone number");
+  const [profilePicture,setProfilePicture]= useState("");
+  const [error, setError] = useState("");
+  const [languagePreference,setLanguagePreference]= useState("languages");
+  const [resumePDF,setResumePDF]= useState("Resume");
+
+  const fetchUserData = async () => {
+    try {
+      const response = await getUser();
+      const user = response.data;
+      setUsername(user.username);
+      setEmail(user.email);
+      setPhoneNumber(user.phoneNumber);
+      setResumePDF(user.resumePDF);
+      setProfilePicture(user.profilePicture);
+    } catch (error) {
+
+      console.error("Error fetching user data:", error);
+      setError(error);
+      setTimeout(()=>{
+          navigate("/user/signin");   
+      },2000);
+    }
+  };
+  fetchUserData();
   return (
-    <div className='w-full bg-background min-h-[88vh] flex items-center'>
+    <>
+    {error && <ErrorNotification message={error} />}
+    <div className="flex flex-col w-full bg-background min-h-screen bg-muted/40">
+    <div className="max-w-3xl m-10 bg-card lg:min-w-[80vw] mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="flex flex-col items-center space-y-6">
+        <div className="w-32 h-32 rounded-sm shadow-xl bg-muted overflow-hidden">
+          <img
+            src={`${profilePicture}`}
+            alt="User Profile"
+            width="128"
+            height="128"
+            className="object-cover w-full h-full"
+            style={{ aspectRatio: '128 / 128', objectFit: 'cover' }}
+          />
+        </div>
+        <div className="text-center space-y-2">
+          <h1 className="text-2xl text-[#222222] font-bold">{username}</h1>
+          <p className="text-muted">{email}</p>
+          <p className="text-muted">{phoneNumber}</p>
+        </div>
+      </div>
+      <div data-orientation="horizontal" role="none" className="shrink-0 bg-border h-[1px] w-full my-8"></div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl text-[#222222] font-bold">Personal Information</h2>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label
+                className="text-sm text-[#222222] font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                htmlFor="name"
+              >
+                Name
+              </label>
+              <div
+                className="flex h-10 w-full rounded-sm shadow-xl border border-input px-3 bg-primary py-2 tering-offset-background file:border-0 file:bg-transparent text-primary file:text-sm file:font-medium placeholder:text-muted
+                disabled:cursor-not-allowed disabled:opacity-50"
+                id="name"
+                readOnly
+              >
+                {`${username}`}
+                </div>
+            </div>
 
-    <div class="max-w-6xl mr-10 ml-10 mx-auto text-primary p-6 sm:p-8 bg-card rounded-lg shadow-lg">
-        <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
-            <div class="flex-shrink-0">
-            <span class="relative flex shrink-0 overflow-hidden rounded-full w-24 h-24 md:w-32 md:h-32">
-                <img class="aspect-square h-full w-full" alt="User Avatar" src="/user.jpeg" />
-            </span>
-            </div>
-            <div class="flex-1 grid gap-4">
-            <div class="grid gap-1">
-                <h1 class="text-2xl font-bold">John Doe</h1>
-                <p class="text-muted">Software Engineer</p>
-            </div>
-            <div class="grid gap-2">
-                <div class="flex items-center gap-2">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="w-5 h-5 text-muted"
-                >
-                    <rect width="20" height="16" x="2" y="4" rx="2"></rect>
-                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-                </svg>
-                <span>john.doe@example.com</span>
-                </div>
-                <div class="flex items-center gap-2">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="w-5 h-5 text-muted"
-                >
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                </svg>
-                <span>+1 (555) 123-4567</span>
-                </div>
-                <div class="flex items-center gap-2">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="w-5 h-5 text-muted"
-                >
-                    <path d="m5 8 6 6"></path>
-                    <path d="m4 14 6-6 2-3"></path>
-                    <path d="M2 5h12"></path>
-                    <path d="M7 2h1"></path>
-                    <path d="m22 22-5-10-5 10"></path>
-                    <path d="M14 18h6"></path>
-                </svg>
-                <span>English, Spanish</span>
-                </div>
-            </div>
-            </div>
-        </div>
-        <div data-orientation="horizontal" role="none" class="shrink-0 bg-border h-[1px] w-full my-6"></div>
-        <div class="grid gap-6">
             <div>
-            <h2 class="text-lg font-semibold">About</h2>
-            <p class="text-muted">
-                John Doe is a skilled software engineer with 5 years of experience in the industry. He has a strong
-                background in full-stack web development, with expertise in JavaScript, React, and Node.js. John is
-                passionate about building scalable and user-friendly applications that solve real-world problems.
-            </p>
+              <label
+                className="text-sm text-[#222222] font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                htmlFor="phone"
+              >
+                Phone
+              </label>
+              <div
+                className="flex h-10 w-full rounded-sm shadow-xl border border-input bg-primary text-[#ffffff] px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                id="phone"
+                readOnly
+              >
+              {`${phoneNumber}`}
+              </div>
             </div>
             <div>
-            <h2 class="text-lg font-semibold">Resume</h2>
-            <div class="flex items-center gap-2">
+              <label
+                className="text-sm text-[#222222] font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                htmlFor="language"
+              >
+                Language
+              </label>
+              <div
+                className="flex h-10 w-full rounded-sm shadow-xl border border-input bg-primary text-[#ffffff] px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                id="language"
+                readOnly
+                >{`${languagePreference}`}
+                </div>
+            </div>
+          </div>
+        </div>
+        <div className="space-y-4">
+          <h2 className="text-xl text-[#222222] font-bold">Resume</h2>
+          <div className="bg-muted rounded-sm shadow-xl overflow-hidden">
+            <div className="flex items-center justify-between px-4 py-3 bg-muted">
+              <div className="flex items-center gap-2">
                 <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="w-5 h-5 text-muted"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="w-5 h-5 text-muted"
                 >
-                <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
-                <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+                  <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+                  <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
                 </svg>
-                <p>View Resume</p>
+                <span className="text-sm text-[#222222] text-muted">Resume.pdf</span>
+              </div>
+              <a
+                href="#"
+                className="inline-flex items-center justify-center whitespace-nowrap rounded-sm shadow-xl text-sm text-[#222222] font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-secondary hover:bg-accent hover:text-accent h-10 px-4 py-2"
+              >
+                Download
+              </a>
             </div>
-            </div>
+          </div>
         </div>
-        </div>
+      </div>
+      <div className="flex items-center justify-between">
+          <h2 className="text-xl text-[#222222] font-bold">Update Profile</h2>
+          <button className="inline-flex text-[#222222] bg-secondary items-center justify-center whitespace-nowrap rounded-sm shadow-xl text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input hover:bg-accent hover:text-accent h-10 px-4 py-2">
+              Update Profile
+          </button>
+      </div>
+      <UpdateProfile/>
     </div>
-  )
-}
+    
+    </div>
+    
+    
+    
 
-export default UserProfile
+    </>
+  );
+};
+
+export default UserProfile;

@@ -1,6 +1,6 @@
 const express = require('express');
 const { validationResult } = require('express-validator');
-const { registerUser, loginUser, editUser } = require('../controllers/user.controller');
+const { getUser,registerUser, loginUser, editUser } = require('../controllers/user.controller');
 const authMiddleware = require('../middlewares/userauth.middleware'); 
 const upload = require("../middlewares/multer.middleware")
 
@@ -25,5 +25,7 @@ router.post('/login', loginUser);
 
 // PUT /api/users/edit
 router.put('/edit', authMiddleware, editUser);
+
+router.get('/',authMiddleware,getUser);
 
 module.exports = router;

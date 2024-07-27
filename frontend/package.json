@@ -18,10 +18,12 @@
     "@monaco-editor/react": "^4.6.0",
     "@zegocloud/zego-uikit-prebuilt": "^2.6.0",
     "agora-rtc-sdk-ng": "^4.21.0",
+    "aos": "^2.3.4",
     "axios": "^1.7.2",
     "cloudinary": "^2.3.0",
     "firebase": "^10.12.3",
     "framer-motion": "^11.3.5",
+    "js-cookie": "^3.0.5",
     "konva": "^9.3.14",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -31,7 +33,8 @@
     "recoil": "^0.7.7",
     "socket.io-client": "^4.7.5",
     "uuid": "^10.0.0",
-    "zego-superboard-web": "^2.15.3"
+    "zego-superboard-web": "^2.15.3",
+    "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
