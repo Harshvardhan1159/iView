@@ -8,18 +8,17 @@ const UpdateProfile = () => {
   const navigate = useNavigate();
 
   const [firstName, setFirstName] = useState('First Name');
-  const [lastName,setLastName] = useState('Last Name');
-  const [username,setUsername]= useState("");
-  const [email,setEmail] = useState('');
-  const[phoneNumber,setPhoneNumber]=useState('');
-  const[resumePDF,setResumePDF]=useState("");
-  const [languagePreference,setLanguagePreference] = useState('');
+  const [lastName, setLastName] = useState('Last Name');
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const resumeRef = useRef(null);
+  const [languagePreference, setLanguagePreference] = useState('');
   const [profilePicture, setProfilePicture] = useState(null);
+  const [profilePicturePreview, setProfilePicturePreview] = useState('');
 
-
-  const [error,setError]=useState("");
-  const [notification,setNotification]=useState("");
-
+  const [error, setError] = useState('');
+  const [notification, setNotification] = useState('');
 
   const fetchUserData = async () => {
     try {
@@ -28,57 +27,63 @@ const UpdateProfile = () => {
       setUsername(user.username);
       setEmail(user.email);
       setPhoneNumber(user.phoneNumber);
-      setResumePDF(user.resumePDF);
+      resumeRef.current = user.resumePDF;
       setProfilePicture(user.profilePicture);
       setLanguagePreference(user.languagePreference);
     } catch (error) {
-      console.error("Error fetching user data:", error);
-      setError(error);
-      setTimeout(()=>{
-          navigate("/user/signin");   
-      },2000);
+      console.error('Error fetching user data:', error);
+      setError(error.message || 'Failed to fetch user data');
+      setTimeout(() => {
+        navigate('/user/signin');
+      }, 2000);
     }
   };
-  fetchUserData();
 
-  const updateUserData = async(e)=>{
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  const updateUserData = async (e) => {
     e.preventDefault();
-    const userData ={
-      username,
-      email,
-      profilePicture,
-      phoneNumber,
-      resumePDF,
-      languagePreference
+
+    // Prepare FormData
+    const formData = new FormData();
+    formData.append('username', username);
+    formData.append('email', email);
+    formData.append('phoneNumber', phoneNumber);
+    formData.append('languagePreference', languagePreference);
+    if (profilePicture) {
+      formData.append('profilePicture', profilePicture);
     }
-    console.log(userData);
+    if (resumeRef.current && resumeRef.current.files && resumeRef.current.files[0]) {
+      formData.append('resumePDF', resumeRef.current.files[0]);
+    }
+
     try {
-       const response = await updateUser(userData);
-       console.log(response);
-       setNotification("User Updated Successfully");
-       setTimeout(()=>{
-        setNotification(""); 
-       },3000)
+      const response = await updateUser(formData);
+      console.log(response);
+      setNotification('User Updated Successfully');
+      setTimeout(() => {
+        setNotification('');
+      }, 3000);
     } catch (error) {
-      setError(error.data)
+      setError(error.message || 'Failed to update user');
       console.log(error);
-      
     }
-  }
+  };
 
-    // Handle profile picture file change
-    const handleProfilePictureChange = (event) => {
-      const file = event.target.files[0];
-      if (file) {
-        setProfilePicture(file);
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setProfilePicture(reader.result);
-        };
-        reader.readAsDataURL(file);
-      }
-    };
-
+  // Handle profile picture file change
+  const handleProfilePictureChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setProfilePicture(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfilePicturePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   return (
     <>
@@ -95,9 +100,9 @@ const UpdateProfile = () => {
             <form onSubmit={updateUserData} className="p-6 space-y-4">
               <div className="text-center mb-6">
                 <div className="relative w-32 h-32 mx-auto">
-                  {profilePicture ? (
+                  {profilePicturePreview ? (
                     <img
-                      src={profilePicture}
+                      src={profilePicturePreview}
                       alt="Profile Preview"
                       className="absolute inset-0 object-cover w-full h-full rounded-sm"
                     />
@@ -191,44 +196,39 @@ const UpdateProfile = () => {
               <div className="space-y-2">
                 <label
                   className="text-sm text-primary font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  htmlFor="languagePreference"
+                  htmlFor="language"
                 >
                   Language Preference
                 </label>
-                <select
-                  className="flex h-10 w-full rounded-sm border border-input bg-[#ffffff] px-3 py-2 text-sm text-myted ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                  id="languagePreference"
+                <input
+                  className="flex h-10 w-full rounded-sm border border-input px-3 py-2 text-sm text-[#222222] ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  id="language"
+                  placeholder="Language Preference"
                   value={languagePreference}
                   onChange={(e) => setLanguagePreference(e.target.value)}
-                >
-                  <option value="">Select a language</option>
-                  <option value="English">English</option>
-                  <option value="Hindi">Hindi</option>
-                </select>
+                />
               </div>
               <div className="space-y-2">
                 <label
                   className="text-sm text-primary font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   htmlFor="resume"
                 >
-                  Upload Resume (PDF)
+                  Upload Resume
                 </label>
                 <input
-                  className="flex h-10 w-full bg-[#ffffff] rounded-sm border border-input px-3 py-2 text-sm text-muted ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex h-10 w-full rounded-sm border border-input px-3 py-2 text-sm text-muted ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   id="resume"
-                  accept=".pdf"
                   type="file"
-                  onChange={()=>{setResumePDF(e.target.value)}}
+                  ref={resumeRef}
+                  accept="application/pdf"
                 />
               </div>
-              <div className="flex justify-end">
-                <button
-                  className="inline-flex h-10 items-center justify-center rounded-sm bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-                  type="submit"
-                >
-                  Update Profile
-                </button>
-              </div>
+              <button
+                className="w-full rounded-sm bg-primary py-2 text-sm text-white transition-colors hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                type="submit"
+              >
+                Update Profile
+              </button>
             </form>
           </div>
         </div>

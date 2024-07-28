@@ -121,7 +121,7 @@ const loginUser = async (req, res) => {
     jwt.sign(
       payload,
       process.env.JWT_SECRET,
-      { expiresIn: '1h' },
+      { expiresIn: '24h' },
       (err, token) => {
         if (err) throw err;
         // Set the token in a cookie
@@ -141,7 +141,9 @@ const loginUser = async (req, res) => {
 
 // Function to edit user details
 const editUser = async (req, res) => {
-  const { username, email, phoneNumber, profilePicture, resumePDF, languagePreference } = req.body;
+  const profilePicture = req.files?.profilePicture?.[0]?.path;
+  const resumePDF = req.files?.resumePDF?.[0]?.path;
+  const { username, email, phoneNumber, languagePreference } = req.body;
 
   try {
     // Fetch user from database
@@ -155,16 +157,19 @@ const editUser = async (req, res) => {
     user.username = username;
     user.email = email;
     user.phoneNumber = phoneNumber;
-
-    if (profilePicture) {
-      user.profilePicture = profilePicture;
-    }
-
-    if (resumePDF) {
-      user.resumePDF = resumePDF;
-    }
-
     user.languagePreference = languagePreference;
+
+    // Upload new profile picture if provided
+    if (profilePicture) {
+      const result = await uploadOnCloudinary(profilePicture);
+      user.profilePicture = result.secure_url;
+    }
+
+    // Upload new resume if provided
+    if (resumePDF) {
+      const result = await uploadFileOnFireBase(resumePDF, `resumes/${Date.now()}_${req.files.resumePDF[0].originalname}`);
+      user.resumePDF = result; // Assuming result is a URL
+    }
 
     // Save updated user
     await user.save();
@@ -175,6 +180,14 @@ const editUser = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+module.exports = {
+  getUser,
+  registerUser,
+  loginUser,
+  editUser,
+};
+
 
 module.exports = {
   getUser,

@@ -15,15 +15,17 @@ import HRDashboard from './pages/Dashboard/HRDashboard/HRDashboard';
 import HRProfile from './pages/Profile/HRProfile/HRProfile';
 import HRSignup from './pages/SignUp/HRSignup/HRSignup';
 import HRSignIn from './pages/SignIn/HRSignIn/HRSignIn';
+import PhoneAuth from './components/PhoneAuthentication/PhoneAuthnetication';
 // import SocketComponent from './socket/SocketComponentTest';
 
 function App() {
   return (
     <>
       
-      {/* <Navbar /> */}
+      <Navbar />
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/auth" element={<PhoneAuth />} />
         <Route path="/selectrole" element={<SelectRole />} />
         <Route path="/user/signup" element={<UserSignup />} />
         <Route path="/user/signin" element={<UserSignIn />} />

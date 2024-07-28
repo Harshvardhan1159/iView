@@ -24,7 +24,15 @@ router.route("/signup").post(
 router.post('/login', loginUser);
 
 // PUT /api/users/edit
-router.put('/edit', authMiddleware, editUser);
+router.put('/edit', authMiddleware, upload.fields([
+    {   name: 'profilePicture', 
+        maxCount : 1
+    }, 
+    {    name: 'resumePDF' ,
+        maxCount : 1
+
+    }]),
+ editUser);
 
 router.get('/',authMiddleware,getUser);
 
