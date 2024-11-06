@@ -154,7 +154,7 @@ const UserSignup = () => {
                     First Name
                   </label>
                   <input
-                    className="flex h-10 w-full rounded-sm border border-input  px-3 py-2 text-sm text-primary ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="flex h-10 w-full rounded-sm border border-input  px-3 py-2 text-sm text-black ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                     id="first-name"
                     placeholder="John"
                     required
@@ -170,7 +170,7 @@ const UserSignup = () => {
                     Last Name
                   </label>
                   <input
-                    className="flex h-10 w-full rounded-sm border border-input  px-3 py-2 text-sm text-primary ring-offset-background file:border-0 file:bg-transparent file:text-sm  file:text-primary file:font-medium placeholder:text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="flex h-10 w-full rounded-sm border border-input  px-3 py-2 text-sm text-black ring-offset-background file:border-0 file:bg-transparent file:text-sm  file:text-primary file:font-medium placeholder:text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                     id="last-name"
                     placeholder="Doe"
                     required
@@ -186,7 +186,7 @@ const UserSignup = () => {
                   Email Address
                 </label>
                 <input
-                  className="flex h-10 w-full rounded-sm border border-input  px-3 py-2 text-sm text-primary ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex h-10 w-full rounded-sm border border-input  px-3 py-2 text-sm text-black ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   id="email"
                   placeholder="example@email.com"
                   required
@@ -202,7 +202,7 @@ const UserSignup = () => {
                   Phone Number
                 </label>
                 <input
-                  className="flex h-10 w-full rounded-sm border border-input  px-3 py-2 text-sm text-primary ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex h-10 w-full rounded-sm border border-input  px-3 py-2 text-sm text-black ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   id="phone"
                   placeholder="+1 (555) 555-5555"
                   required
@@ -228,7 +228,7 @@ const UserSignup = () => {
                     Password
                   </label>
                   <input
-                    className="flex h-10 w-full rounded-sm border border-input  px-3 py-2 text-sm text-primary ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="flex h-10 w-full rounded-sm border border-input  px-3 py-2 text-sm text-black ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                     id="password"
                     required
                     type="password"
@@ -243,7 +243,7 @@ const UserSignup = () => {
                     Confirm Password
                   </label>
                   <input
-                    className="flex h-10 w-full rounded-sm border border-input  px-3 py-2 text-sm text-primary ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="flex h-10 w-full rounded-sm border border-input  px-3 py-2 text-sm text-black ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                     id="confirm-password"
                     required
                     type="password"
