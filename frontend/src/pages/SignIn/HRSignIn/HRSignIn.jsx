@@ -22,9 +22,6 @@ const HRSignIn = () => {
         try {
             const response = await loginHR(logindata);
             console.log(response);
-            Cookies.set('token', response.data.token); // Store token in cookies
-            const token = Cookies.get('token'); // Retrieve token from cookies
-            console.log('Auth Token:', token);
             setNotification("Login successful!");
             setTimeout(() => {
                 setNotification("");

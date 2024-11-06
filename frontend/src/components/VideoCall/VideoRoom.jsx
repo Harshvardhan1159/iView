@@ -29,7 +29,7 @@ const VideoRoom = () => {
 
   return (
     <div className='h-[400px] overflow-y-scroll'>
-      <div ref={myMeeting} className='h-[100px]' style={{width:"auto"}}/>
+      
     </div>
   )
 }

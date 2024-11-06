@@ -2,6 +2,22 @@ import axios from 'axios';
 
 const API_URL = `http://localhost:5000/api/hr`; // Update the URL as needed
 
+
+// Function to fetch HR
+export const fetchHR = async()=>{
+  try {
+    const response = await axios.get(`${API_URL}`,{
+      withCredentials: true
+    })
+    return response.data;
+  } catch (error) {
+    console.error("Error in Fetching HR");
+    console.log(error);
+    throw new Error(error.response?.data?.message || 'An error occured during fetching hr details');
+
+  }
+}
+
 // Function to register a new HR
 export const registerHR = async (hrData) => {
   try {

@@ -2,7 +2,7 @@ import React from 'react';
 
 const ErrorNotification = ({ message }) => {
   return (
-    <div className="fixed bottom-2 right-2">
+    <div className="fixed z-50 bottom-2 right-2">
       <div className="bg-white rounded-lg border-gray-300 border p-3 shadow-lg">
         <div className="flex flex-row">
           <div className="px-2">

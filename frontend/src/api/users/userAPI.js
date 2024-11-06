@@ -31,9 +31,9 @@ export const registerUser = async (userData) => {
 
 
 // Function to log in a user
-export const loginUser = async (credentials) => {
+export const loginUser = async () => {
   try {
-    const response = await axios.post(`${API_URL}/login`, credentials, {
+    const response = await axios.post(`${API_URL}/login`, {
       withCredentials: true // Important for sending cookies
     });
     return response.data;

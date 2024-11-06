@@ -4,6 +4,20 @@ const HR = require('../models/hr.model');
 const { uploadOnCloudinary } = require("../utils/Cloudinary/cloudinary");
 require('dotenv').config();
 
+
+// Fetch HR Details
+const getHR = async(req,res)=>{
+    try {
+      const hr = req.hr.toObject();
+      delete hr.hrManager.password;
+      delete hr._id;
+      delete hr.__v;
+      res.json(hr);
+    } catch (error) { 
+      res.status(401).json({message: "Unauthorized"});
+    }
+}
+
 // Function to register a new HR
 const registerHR = async (req, res) => {
   const profilePicture = req.files?.profilePicture?.[0]?.path;
@@ -132,6 +146,7 @@ const editHR = async (req, res) => {
 };
 
 module.exports = {
+  getHR,
   registerHR,
   loginHR,
   editHR,

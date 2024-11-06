@@ -14,7 +14,6 @@ const auth = async (req, res, next) => {
     if (!req.hr) {
       return res.status(401).json({ message: 'HR not found' });
     }
-
     next();
   } catch (error) {
     console.error('Error in auth middleware:', error);

@@ -1,9 +1,13 @@
 const express = require('express');
-const { registerHR, loginHR, editHR } = require('../controllers/hr.controller');
-const authMiddleware = require('../middlewares/hrauth.middleware'); // Middleware for HR authentication
+const { registerHR, loginHR, editHR,getHR } = require('../controllers/hr.controller');
+const authMiddleware = require('../middlewares/hrAuth.middleware'); // Middleware for HR authentication
 const upload = require("../middlewares/multer.middleware");
 
 const router = express.Router();
+
+
+// get
+router.get('/',authMiddleware,getHR);
 
 // POST /api/hr/signup
 router.post('/signup', 

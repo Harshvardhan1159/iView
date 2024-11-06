@@ -1,15 +1,13 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { validationResult } = require('express-validator');
 const User = require('../models/user.model');
 const { uploadOnCloudinary } = require("../utils/Cloudinary/cloudinary");
 const { uploadFileOnFireBase } = require('../utils/Firebase/firebase');
+const { validationResult } = require('express-validator');
 require('dotenv').config();
-const cookieParser = require('cookie-parser');
 
 // Function to get User Details
-const getUser = async(req,res)=>{
-
+const getUser = async (req, res) => {
   try {
     const user = req.user.toObject();
     delete user.password;
@@ -19,25 +17,23 @@ const getUser = async(req,res)=>{
   } catch (error) {
     res.status(401).json({ message: 'Unauthorized' });
   }
-}
-
+};
 
 // Function to register a new user
 const registerUser = async (req, res) => {
   const profilePicture = req.files?.profilePicture?.[0]?.path;
   const resumePDF = req.files?.resumePDF?.[0]?.path;
-
   const { username, email, password, phoneNumber, languagePreference } = req.body;
 
+  // Validate inputs
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   try {
-    // Check if user with the same email exists
-    let user = await User.findOne({
-      $or: [
-        { email: email },
-        { phoneNumber: phoneNumber }
-      ]
-    });
-    
+    // Check if user with the same email or phone number exists
+    let user = await User.findOne({ $or: [{ email }, { phoneNumber }] });
     if (user) {
       return res.status(400).json({ message: 'User already exists with this email or Phone Number' });
     }
@@ -74,10 +70,7 @@ const registerUser = async (req, res) => {
     await user.save();
 
     // Return success response
-    res.status(201).json({ 
-        message: 'User registered successfully',
-        user 
-    });
+    res.status(201).json({ message: 'User registered successfully', user });
   } catch (err) {
     console.error('Error in user registration:', err);
     res.status(500).json({ message: 'Server error' });
@@ -89,19 +82,15 @@ const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Check if email and password are provided
-    if (!email || !password) {
-      return res.status(400).json({ message: 'Please provide both email and password' });
+    // Validate inputs
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
 
     // Check if user exists
     let user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
-
-    // Ensure the password field is populated
-    if (!user.password) {
+    if (!user || !user.password) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
@@ -112,11 +101,7 @@ const loginUser = async (req, res) => {
     }
 
     // Create JWT token
-    const payload = {
-      user: {
-        id: user.id,
-      },
-    };
+    const payload = { user: { id: user.id } };
 
     jwt.sign(
       payload,
@@ -126,11 +111,11 @@ const loginUser = async (req, res) => {
         if (err) throw err;
         // Set the token in a cookie
         res.cookie('authToken', token, {
-          // httpOnly: true, // Cookie is not accessible via JavaScript
+          httpOnly: true, // Cookie is not accessible via JavaScript
           secure: process.env.NODE_ENV === 'production', // Set to true in production
           sameSite: 'Strict', // Mitigates CSRF attacks
         });
-        res.json({ "message":"User Logged In Successfully" });
+        res.json({ message: 'User Logged In Successfully' });
       }
     );
   } catch (err) {
@@ -148,27 +133,26 @@ const editUser = async (req, res) => {
   try {
     // Fetch user from database
     let user = await User.findById(req.user.id);
-
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
     // Update user details
-    user.username = username;
-    user.email = email;
-    user.phoneNumber = phoneNumber;
-    user.languagePreference = languagePreference;
+    user.username = username || user.username;
+    user.email = email || user.email;
+    user.phoneNumber = phoneNumber || user.phoneNumber;
+    user.languagePreference = languagePreference || user.languagePreference;
 
     // Upload new profile picture if provided
     if (profilePicture) {
       const result = await uploadOnCloudinary(profilePicture);
-      user.profilePicture = result.secure_url;
+      user.profilePicture = result.secure_url || user.profilePicture;
     }
 
     // Upload new resume if provided
     if (resumePDF) {
       const result = await uploadFileOnFireBase(resumePDF, `resumes/${Date.now()}_${req.files.resumePDF[0].originalname}`);
-      user.resumePDF = result; // Assuming result is a URL
+      user.resumePDF = result || user.resumePDF; // Assuming result is a URL
     }
 
     // Save updated user
@@ -180,14 +164,6 @@ const editUser = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
-
-module.exports = {
-  getUser,
-  registerUser,
-  loginUser,
-  editUser,
-};
-
 
 module.exports = {
   getUser,

@@ -13,7 +13,7 @@ const InterviewInterface = ({ room }) => {
         </div>
       </div>
       <div className="bg-background flex justify-center items-center p-8">
-        {room ? <VideoRoom /> : <VideoHome />}
+        {/* {room ? <VideoRoom /> : <VideoHome />} */}
       </div>
     </div>
   );

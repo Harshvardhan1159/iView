@@ -11,13 +11,8 @@ const VideoHome = () => {
 
   return (
     <div>
-      <input 
-        value={value} 
-        onChange={e => setValue(e.target.value)} 
-        type='text' 
-        placeholder='Enter room code' 
-      />
-      <button onClick={handleJoinRoom}>Join</button>
+
+      <button>Join</button>
     </div>
   );
 };
