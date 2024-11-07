@@ -1,5 +1,6 @@
 import React from 'react';
 import CodeEditor from '../../components/CodeEditor/CodeEditor';
+import VideoCall from '../../components/VideoCall/VideoCall';
 
 
 const InterviewInterface = ({ room }) => {
@@ -11,6 +12,7 @@ const InterviewInterface = ({ room }) => {
         </div>
       </div>
       <div className="bg-background flex justify-center items-center p-8">
+        <VideoCall/>
       </div>
     </div>
   );
