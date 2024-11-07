@@ -21,7 +21,7 @@ import PhoneAuth from "./components/PhoneAuthentication/PhoneAuthnetication";
 function App() {
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/auth" element={<PhoneAuth />} />

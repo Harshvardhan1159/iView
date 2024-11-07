@@ -16,6 +16,7 @@
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@monaco-editor/react": "^4.6.0",
+    "@stream-io/video-react-sdk": "^1.7.9",
     "@zegocloud/zego-uikit-prebuilt": "^2.6.0",
     "agora-rtc-sdk-ng": "^4.21.0",
     "aos": "^2.3.4",
