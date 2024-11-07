@@ -30,11 +30,13 @@ call.join({ create: true });
 
 const App = () => {
   return (
+    <div className="p-10">
     <StreamVideo client={client}>
       <StreamCall call={call}>
         <MyUILayout />
       </StreamCall>
     </StreamVideo>
+    </div>
   );
 };
 
