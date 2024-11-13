@@ -101,6 +101,7 @@ const getInterviewsByEmail = async (req, res) => {
 
 // Get Interviews by HR ID
 const getInterviewsByHRId = async (req, res) => {
+  console.log(req.data);
   try {
     const interviews = await Interview.find({ interviewier: req.hr._id });
 

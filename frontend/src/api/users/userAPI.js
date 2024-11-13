@@ -31,17 +31,23 @@ export const registerUser = async (userData) => {
 
 
 // Function to log in a user
-export const loginUser = async () => {
+export const loginUser = async (loginData) => {
+  console.log(loginData);
   try {
-    const response = await axios.post(`${API_URL}/login`, {
-      withCredentials: true // Important for sending cookies
-    });
+    const response = await axios.post(
+      `${API_URL}/login`,
+      loginData, 
+      {
+        withCredentials: true
+      }
+    );
     return response.data;
   } catch (error) {
     console.error('Error logging in user:', error);
     throw error;
   }
 };
+
 
 
 

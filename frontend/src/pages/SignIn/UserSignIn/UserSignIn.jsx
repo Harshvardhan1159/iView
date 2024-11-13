@@ -17,12 +17,12 @@ const UserSignIn = () => {
             email,
             password
         };
-    
+        console.log(logindata);
         try {
             const response = await loginUser(logindata);
             console.log(response);
             Cookies.set('name', 'value')
-            const token = await Cookies.get(); // Get the token from cookies
+            const token = Cookies.get(); 
             console.log(Cookies.get());
             console.log('Auth Token:', token);
             setNotification("Login successful!");

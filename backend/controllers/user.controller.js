@@ -80,7 +80,7 @@ const registerUser = async (req, res) => {
 // Function to login a user
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
-
+  console.log(email,password);
   try {
     // Validate inputs
     const errors = validationResult(req);

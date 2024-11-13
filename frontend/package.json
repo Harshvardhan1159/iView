@@ -22,6 +22,7 @@
     "aos": "^2.3.4",
     "axios": "^1.7.2",
     "cloudinary": "^2.3.0",
+    "date-fns": "^4.1.0",
     "firebase": "^10.12.3",
     "framer-motion": "^11.3.5",
     "js-cookie": "^3.0.5",

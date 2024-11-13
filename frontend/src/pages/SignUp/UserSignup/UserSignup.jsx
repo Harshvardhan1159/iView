@@ -4,6 +4,7 @@ import { signInWithPhoneNumber } from 'firebase/auth';
 import { registerUser } from '../../../api/users/userAPI';
 import ErrorNotification from '../../../components/Notification/ErrorNotification/ErrorNotification';
 import SuccessNotification from '../../../components/Notification/SuccessNotification/SuccessNotification';
+import {useNavigate} from "react-router-dom";
 
 const UserSignup = () => {
   // const [firstName, setFirstName] = useState('');
@@ -22,6 +23,7 @@ const UserSignup = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [showNotification, setShowNotification] = useState(false);
   const [isOTPBoxOpen, setIsOTPBoxOpen] = useState(false);
+  const navigate = useNavigate();
 
 
   // Refs for form inputs
@@ -81,6 +83,7 @@ const UserSignup = () => {
       setShowNotification(true);
       setTimeout(() => {
         setShowNotification(false);
+        navigate("/user/signin");
       }, 5000); 
     } catch (error) {
       console.error('Error registering user:', error);
