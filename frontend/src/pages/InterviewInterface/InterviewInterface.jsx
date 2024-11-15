@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import CodeEditor from "../../components/CodeEditor/CodeEditor";
 import VideoCallComponent from "../../components/VideoCall/video-sdk/VideoCallComponent";
+import WhiteboardContainer from "../../components/Whiteboard/WhiteboardContainer";
 import { PencilLine, Code } from "lucide-react";
 
 const InterviewInterface = ({ room }) => {
@@ -44,7 +45,7 @@ const InterviewInterface = ({ room }) => {
               <CodeEditor />
             ) : (
               <div className="h-screen w-full bg-[#2a2a2a] flex items-center justify-center">
-                WhiteBoard
+                <WhiteboardContainer/>
               </div>
             )}
           </div>

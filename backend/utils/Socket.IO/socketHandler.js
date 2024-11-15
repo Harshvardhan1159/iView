@@ -1,46 +1,32 @@
-const { Server } = require('socket.io');
 
-const users = {}; // To store user socket IDs
 
-module.exports = (server) => {
-    const io = new Server(server, {
+
+const socketIO = require('socket.io');
+
+    const io = new socketIO.Server( {
         cors: {
-            origin: "*",
-            methods: ["GET", "POST"]
+          origin: 'http://localhost:5173', // Replace with your frontend's URL
+          methods: ['GET', 'POST']
         }
-    });
-
-    io.on('connection', (socket) => {
-        console.log('a user connected:', socket.id);
-
-        // Store the user's socket ID with their username
-        socket.on('register', (username) => {
-            users[username] = socket.id;
-            console.log(`User registered: ${username} with socket ID: ${socket.id}`);
+      });
+      io.on('connection', (socket) => {
+        console.log(`${socket.id} connected`); // Log connection
+      
+        socket.on('draw', (data) => {
+          console.log('Draw event received:', data); // Log received draw event
+          socket.broadcast.emit('draw', data); // Broadcast to other clients
         });
-
-        // Send a private message to a specific user
-        socket.on('private_message', ({ recipient, message }) => {
-            const recipientSocketId = users[recipient];
-            if (recipientSocketId) {
-                io.to(recipientSocketId).emit('private_message', {
-                    sender: socket.id,
-                    message: message
-                });
-            } else {
-                console.log(`User ${recipient} not found.`);
-            }
+      
+        socket.on('down', (data) => {
+          console.log('Down event received:', data); // Log received down event
+          socket.broadcast.emit('down', data); // Broadcast to other clients
         });
-
+      
         socket.on('disconnect', () => {
-            console.log('user disconnected:', socket.id);
-            // Remove user from the users object
-            for (let username in users) {
-                if (users[username] === socket.id) {
-                    delete users[username];
-                    break;
-                }
-            }
+          console.log(`${socket.id} disconnected`); // Log disconnection
         });
-    });
+      });
+
+module.exports = {
+    server: io
 };

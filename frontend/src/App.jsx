@@ -43,7 +43,9 @@ function App() {
           path="/interview/room/test"
           element={<VideoCallComponent />}
         />
+        <Route path="/test" element={<WhiteboardContainer />} />
         <Route path="*" element={<PageNotFound />} />
+  
       </Routes>
     </>
   );
