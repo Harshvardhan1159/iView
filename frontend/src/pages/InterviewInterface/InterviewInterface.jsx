@@ -32,8 +32,10 @@ const InterviewInterface = ({ room }) => {
               </span>
             </label>
           </div>
-
-          <CodeEditor />
+          <div className="h-full">
+            {/* <CodeEditor /> */}
+          </div>
+          
         </div>
       </div>
 
