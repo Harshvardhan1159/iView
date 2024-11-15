@@ -18,7 +18,7 @@ const InterviewInterface = ({ room }) => {
       {/* Code Editor Section */}
       <div className="bg-[#1e1e1e] flex justify-center items-center p-6 shadow-lg h-full overflow-y-auto row-span-1 md:row-auto">
         <div className="h-full w-full max-h-full max-w-full rounded-lg overflow-auto shadow-md">
-          <div className="bg-[#2a2a2a] px-6 pt-2 flex w-full justify-end">
+          <div className="bg-[#272727f3] z-40 sticky top-0 px-6 pt-2 flex w-full justify-end">
             <label
               htmlFor="Toggle3"
               className="inline-flex items-center p-2 rounded-md cursor-pointer dark:text-gray-100"
@@ -32,8 +32,16 @@ const InterviewInterface = ({ room }) => {
               </span>
             </label>
           </div>
-          <div className="h-full">
-            {/* <CodeEditor /> */}
+          <div className="min-h-screen">
+            {toggle ? (
+              <CodeEditor />
+            ):(
+              <div className="h-full w-full bg-[#2a2a2a] flex items-center justify-center">
+                WhiteBoard
+              </div>
+             
+            )}
+            
           </div>
           
         </div>
