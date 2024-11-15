@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const API_URL = `http://localhost:5000/api/hr`; // Update the URL as needed
 
+// test
 
 // Function to fetch HR
 export const fetchHR = async()=>{
