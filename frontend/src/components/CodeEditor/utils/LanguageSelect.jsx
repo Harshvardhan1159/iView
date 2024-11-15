@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { LANGUAGE_VERSIONS } from "./constants";
+import { ChevronDown } from "lucide-react";
 
 const languages = Object.entries(LANGUAGE_VERSIONS);
-const ACTIVE_COLOR = "text-blue-400";
+const ACTIVE_COLOR = "text-gray-900";
 
 const LanguageSelector = ({ language, onSelect }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -13,17 +14,18 @@ const LanguageSelector = ({ language, onSelect }) => {
   };
 
   return (
-    <div className="ml-2 mb-4">
-      <p className="mb-2 text-lg text-gray-200">Language:</p>
+    <div className="ml-2 mb-4 flex bg-white w-fit px-4 rounded-md">
+      <p className="text-lg text-gray-900 mr-2">Language: </p>
       <div className="relative inline-block">
         <button
-          className="px-4 py-2 text-gray-200 bg-blue-500 rounded focus:outline-none"
+          className="  flex text-gray-900 text-lg  rounded focus:outline-none"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           {language}
+          <ChevronDown className="p-1"/>
         </button>
         {isMenuOpen && (
-          <div className="absolute right-50 z-10 w-48 mt-2 origin-top-right bg-gray-900 rounded shadow-lg">
+          <div className="absolute right-50 z-10 w-48 mt-2 origin-top-right bg-[#212121] rounded shadow-lg">
             {languages.map(([lang, version]) => (
               <div
                 key={lang}

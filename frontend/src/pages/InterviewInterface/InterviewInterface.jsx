@@ -1,21 +1,46 @@
-import React from "react";
+import React, { useState } from "react";
 import CodeEditor from "../../components/CodeEditor/CodeEditor";
 import VideoCall from "../../components/VideoCall/VideoCall";
+import StreamVideoCall from "../../components/VideoCall/Stream";
+import VideoCallComponent from "../../components/VideoCall/video-sdk/VideoCallComponent";
+import { PencilLine, Code } from "lucide-react";
 
 const InterviewInterface = ({ room }) => {
+  const [toggle, setToggle] = useState(true);
+  const handleOpenWhiteBoard = () => {
+    setToggle(false);
+  };
+  const handleOpenCodeEditor = () => {
+    setToggle(true);
+  };
   return (
-    <div className="grid md:grid-cols-[3.0fr_2.0fr] grid-rows-[auto_1fr] max-w-screen max-h-screen h-screen w-screen md:overflow-hidden overflow-y-auto bg-[#121212] text-gray-200">
+    <div className="grid md:grid-cols-[3.0fr_1.5fr] grid-rows-[auto_1fr] max-w-screen max-h-screen h-screen w-screen md:overflow-hidden overflow-y-auto bg-[#121212] text-gray-200">
       {/* Code Editor Section */}
-      <div className="bg-[#1e1e1e] flex justify-center items-center p-8 shadow-lg h-full overflow-y-auto row-span-1 md:row-auto">
+      <div className="bg-[#1e1e1e] flex justify-center items-center p-6 shadow-lg h-full overflow-y-auto row-span-1 md:row-auto">
         <div className="h-full w-full max-h-full max-w-full rounded-lg overflow-auto shadow-md">
+          <div className="bg-[#2a2a2a] px-6 pt-2 flex w-full justify-end">
+            <label
+              htmlFor="Toggle3"
+              className="inline-flex items-center p-2 rounded-md cursor-pointer dark:text-gray-100"
+            >
+              <input id="Toggle3" type="checkbox" className="hidden peer" />
+              <span onClick={handleOpenCodeEditor} className="px-4 py-2 rounded-l-md bg-[#212121] peer-checked:bg-[#2e2e2e]">
+                <Code />
+              </span>
+              <span onClick={handleOpenWhiteBoard} className="px-4 py-2 rounded-r-md bg-[#2e2e2e] peer-checked:bg-[#212121]">
+                <PencilLine />
+              </span>
+            </label>
+          </div>
+
           <CodeEditor />
         </div>
       </div>
 
       {/* Video Call Section */}
-      <div className="bg-[#1e1e1e] flex justify-center items-center p-6 shadow-lg h-full overflow-y-auto row-span-1 md:row-auto">
+      <div className="bg-[#1e1e1e] flex justify-center items-center p-6 h-full overflow-y-auto row-span-1 md:row-auto">
         <div className="h-full w-full max-h-full max-w-full rounded-lg overflow-auto shadow-md flex items-center justify-center p-4 bg-[#2a2a2a]">
-          <VideoCall />
+          <VideoCallComponent />
         </div>
       </div>
     </div>

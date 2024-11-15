@@ -97,7 +97,7 @@ export default function InterviewListHR() {
                   
                   <button
                     disabled={!isToday(interview.date)}
-                    onClick={handleStartInterview(interview._id)}
+                    onClick={()=> handleStartInterview(interview._id)}
                     className="px-4 py-2 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Start Interview

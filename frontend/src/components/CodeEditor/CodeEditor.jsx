@@ -20,9 +20,12 @@ const CodeEditor = () => {
   };
 
   return (
-    <div id="customScrollbar" className="p-4 bg-[#2a2a2a] overflow-y-scroll h-full ">
-      <div className="flex flex-col space-x-4">
-        <div className="w-full">
+    <div
+      id="customScrollbar"
+      className="p-4 bg-[#2a2a2a] overflow-y-scroll h-full "
+    >
+      <div className="flex flex-col">
+        <div className="w-full ">
           <LanguageSelector language={language} onSelect={onSelect} />
           <Editor
             options={{
@@ -30,7 +33,7 @@ const CodeEditor = () => {
                 enabled: false,
               },
             }}
-            height="50vh"
+            height="65vh"
             theme="vs-dark"
             language={language}
             defaultValue={CODE_SNIPPETS[language]}
@@ -39,7 +42,9 @@ const CodeEditor = () => {
             onChange={(value) => setValue(value)}
           />
         </div>
-        <Output editorRef={editorRef} language={language} />
+        <div className="w-full">
+          <Output editorRef={editorRef} language={language} />
+        </div>
       </div>
     </div>
   );
