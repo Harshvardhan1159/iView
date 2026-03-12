@@ -1,7 +1,7 @@
 // interview.api.js
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/interview'; // Update with your backend API URL
+const API_URL = 'https://iview-backend-hunx.onrender.com/api/interview';
 
 // Create an interview
 export const createInterview = async (interviewData) => {

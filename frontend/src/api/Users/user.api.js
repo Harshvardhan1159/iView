@@ -1,5 +1,5 @@
 import axios from 'axios';
-const API_URL = `http://localhost:5000/api/users`;
+const API_URL = `https://iview-backend-hunx.onrender.com/api/users`;
 
 
 export const getUser = async () => {
@@ -20,7 +20,7 @@ export const getUser = async () => {
 // Function to register a new user
 export const registerUser = async (userData) => {
   console.log(userData);
-  
+
   try {
     const response = await axios.post(`${API_URL}/signup`, userData);
     return response.data.message || 'User registered successfully';
@@ -38,7 +38,7 @@ export const loginUser = async (loginData) => {
   try {
     const response = await axios.post(
       `${API_URL}/login`,
-      loginData, 
+      loginData,
       {
         withCredentials: true
       }

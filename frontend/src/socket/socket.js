@@ -1,7 +1,7 @@
 // src/socket/socket.js
 import { io } from "socket.io-client";
 
-const SOCKET_SERVER_URL = "http://localhost:5000"; // Replace with your server URL
+const SOCKET_SERVER_URL = "https://iview-backend-hunx.onrender.com";
 
 // Function to establish a socket connection for a specific interview
 export const connectToInterview = (interviewID) => {

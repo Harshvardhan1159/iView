@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-const API_URL = `http://localhost:5000/api/hr`; // Update the URL as needed
+const API_URL = `https://iview-backend-hunx.onrender.com/api/hr`;
 
 
 // Function to fetch HR
-export const fetchHR = async()=>{
+export const fetchHR = async () => {
   try {
-    const response = await axios.get(`${API_URL}`,{
+    const response = await axios.get(`${API_URL}`, {
       withCredentials: true
     })
     return response.data;
