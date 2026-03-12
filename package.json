@@ -1,0 +1,16 @@
+{
+  "name": "iview",
+  "version": "1.0.0",
+  "description": "iView revolutionizes online interviews with integrated video conferencing, collaborative code editing, AI-driven insights, and user-friendly dashboards for streamlined candidate evaluation and hiring processes.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^9.0.1"
+  }
+}
