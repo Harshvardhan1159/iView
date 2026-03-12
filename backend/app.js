@@ -13,11 +13,24 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// CORS configuration to allow all origins
+// CORS configuration
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://i-view.vercel.app",       // Your main Vercel URL (update this!)
+];
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
-    credentials: true, // Allows all origins
+    origin: function (origin, callback) {
+      // Allow requests with no origin (mobile apps, Postman, etc.)
+      if (!origin) return callback(null, true);
+      // Allow if origin is in the list OR is a Vercel preview deployment
+      if (allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
+        return callback(null, true);
+      }
+      return callback(new Error("Not allowed by CORS"));
+    },
+    credentials: true,
   })
 );
 
