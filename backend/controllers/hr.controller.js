@@ -114,8 +114,8 @@ const loginHR = async (req, res) => {
         // Set the token in a cookie
         res.cookie('authToken', token, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'Strict',
+          secure: true, // Required for sameSite: 'None'
+          sameSite: 'None',
         });
         res.json({ "message": "HR Logged In Successfully" });
       }

@@ -8,8 +8,7 @@ const hrSchema = new Schema({
     required: true
   },
   profilePicture: {
-    type: String, 
-    required: true
+    type: String
   },
   hrManager: {
     name: {
@@ -30,7 +29,7 @@ const hrSchema = new Schema({
       required: true
     }
   },
-  upcomingInterviews: [Interview.schema],  
+  upcomingInterviews: [Interview.schema],
   createdAt: {
     type: Date,
     default: Date.now

@@ -16,15 +16,14 @@ const userSchema = new Schema({
     required: true
   },
   profilePicture: {
-    type: String,
-    required: true
+    type: String
   },
   phoneNumber: {
     type: String,
     required: true
   },
   resumePDF: {
-    type: String  
+    type: String
   },
   languagePreference: {
     type: String,

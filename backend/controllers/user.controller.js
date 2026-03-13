@@ -124,8 +124,8 @@ const loginUser = async (req, res) => {
         // Set the token in a cookie
         res.cookie('authToken', token, {
           httpOnly: true, // Cookie is not accessible via JavaScript
-          secure: process.env.NODE_ENV === 'production', // Set to true in production
-          sameSite: 'Strict', // Mitigates CSRF attacks
+          secure: true, // Required for sameSite: 'None'
+          sameSite: 'None', // Allows cross-site cookies
         });
         res.json({ message: 'User Logged In Successfully' });
       }
