@@ -53,7 +53,7 @@ const HRSignup = () => {
       setShowNotification(true);
       setTimeout(() => {
         setShowNotification(false);
-        navigate('/login');
+        navigate('/hr/signin');
       }, 5000);
     } catch (error) {
       console.error('Error registering HR:', error);
