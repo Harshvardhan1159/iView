@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 
-const socket = io('https://iview-backend-hunx.onrender.com');
+const socket = io('https://iview-fm1x.onrender.com');
 
 const ChatFloatButton = () => {
   const [isOpen, setIsOpen] = useState(false);

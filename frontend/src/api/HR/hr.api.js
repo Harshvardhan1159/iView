@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = `https://iview-backend-hunx.onrender.com/api/hr`;
+const API_URL = `https://iview-fm1x.onrender.com/api/hr`;
 
 
 // Function to fetch HR
