@@ -22,22 +22,29 @@ export const generatePostBody = (jobRole, companyName, experienceLevel) => {
               `- **Job Role**: [${jobRole}]\n` +
               `- **Company Name**: [${companyName}]\n` +
               `- **Experience Level**: [${experienceLevel}]\n\n` +
-              `The questions should focus on relevant technical concepts, challenges, and problem-solving scenarios that align with the specified role. Provide the data in the following format:\n\n` +
-              `### Questions\n` +
-              `- Each question should include:\n` +
-              `  - **\`id\`**: A unique identifier.\n` +
-              `  - **\`number\`**: The sequence number of the question.\n` +
-              `  - **\`text\`**: A concise technical question relevant to the specified job role.\n` +
-              `  - **\`rating\`**: A numerical value (1-10) indicating the expected proficiency level.\n` +
-              `  - **\`remark\`**: A short evaluation or note about the expected response.\n` +
-              `  - **\`icon\`**: A Lucide icon that visually represents the question topic.\n\n` +
-              `### Basic Skills\n` +
-              `- Each skill should include:\n` +
-              `  - **\`id\`**: A unique identifier.\n` +
-              `  - **\`name\`**: The skill name, focusing on core competencies needed for the job role.\n` +
-              `  - **\`rating\`**: A numerical value (1-10) representing the desired level of proficiency.\n` +
-              `  - **\`icon\`**: A Lucide icon symbolizing the skill area.\n\n` +
-              `Ensure the generated data is suitable for a technical interview, reflecting the complexity and requirements associated with the given role and company.`,
+              `Return the data in a valid JSON format. Your response must be a single JSON object containing two arrays: 'questions' and 'skills'.\n\n` +
+              `Schema:\n` +
+              `{\n` +
+              `  "questions": [\n` +
+              `    {\n` +
+              `      "id": "q1",\n` +
+              `      "number": 1,\n` +
+              `      "text": "Question text here",\n` +
+              `      "rating": 7,\n` +
+              `      "remark": "Expected proficiency/notes",\n` +
+              `      "icon": "boxes"\n` +
+              `    }\n` +
+              `  ],\n` +
+              `  "skills": [\n` +
+              `    {\n` +
+              `      "id": "s1",\n` +
+              `      "name": "Skill name",\n` +
+              `      "rating": 9,\n` +
+              `      "icon": "code"\n` +
+              `    }\n` +
+              `  ]\n` +
+              `}\n\n` +
+              `Strictly provide only the JSON object. Do not include any introductory or concluding text, and do not include markdown code fences (like \`\`\`json).`,
           },
         ],
       },

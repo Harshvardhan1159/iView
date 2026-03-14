@@ -5,61 +5,60 @@ const extractJsonFromText = (text) => {
         console.log("First 500 chars:", text?.substring(0, 500));
         console.log("===================");
 
-        // Step 1: Remove markdown code fences
-        let cleanedText = text.replace(/```json\s*/g, '').replace(/```\s*/g, '');
+        if (!text) return [[], []];
 
-        // Step 2: Remove markdown headers (### Questions, ### Basic Skills, etc.)
-        cleanedText = cleanedText.replace(/###?\s*[^\n]+/g, '');
+        // Step 1: Extract JSON using regex (looking for {...} or [...])
+        // Specifically look for markdown code blocks first
+        let jsonStr = "";
+        const codeBlockMatch = text.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
 
-        // Step 3: Remove explanatory text and keep only JSON-like structures
-        // Find all array structures in the text
-        const arrayMatches = [];
-        let depth = 0;
-        let startIdx = -1;
-
-        for (let i = 0; i < cleanedText.length; i++) {
-            if (cleanedText[i] === '[') {
-                if (depth === 0) startIdx = i;
-                depth++;
-            } else if (cleanedText[i] === ']') {
-                depth--;
-                if (depth === 0 && startIdx !== -1) {
-                    const jsonStr = cleanedText.substring(startIdx, i + 1);
-                    try {
-                        // Attempt to parse this JSON array
-                        const parsed = JSON.parse(jsonStr);
-                        if (Array.isArray(parsed) && parsed.length > 0) {
-                            arrayMatches.push(parsed);
-                        }
-                    } catch (e) {
-                        // If parsing fails, try to fix common issues
-                        const fixed = jsonStr
-                            .replace(/'/g, '"') // Replace single quotes with double quotes
-                            .replace(/,\s*}/g, '}') // Remove trailing commas before }
-                            .replace(/,\s*]/g, ']'); // Remove trailing commas before ]
-
-                        try {
-                            const parsed = JSON.parse(fixed);
-                            if (Array.isArray(parsed) && parsed.length > 0) {
-                                arrayMatches.push(parsed);
-                            }
-                        } catch (e2) {
-                            console.warn('Failed to parse JSON block:', e2.message);
-                        }
-                    }
-                    startIdx = -1;
+        if (codeBlockMatch) {
+            jsonStr = codeBlockMatch[1];
+        } else {
+            // Fallback: Find the first { and the last }
+            const startIdx = text.indexOf('{');
+            const endIdx = text.lastIndexOf('}');
+            if (startIdx !== -1 && endIdx !== -1) {
+                jsonStr = text.substring(startIdx, endIdx + 1);
+            } else {
+                // Try searching for arrays directly [ ... ]
+                const arrayStart = text.indexOf('[');
+                const arrayEnd = text.lastIndexOf(']');
+                if (arrayStart !== -1 && arrayEnd !== -1) {
+                    jsonStr = text.substring(arrayStart, arrayEnd + 1);
                 }
             }
         }
 
-        if (arrayMatches.length > 0) {
-            return arrayMatches;
+        if (!jsonStr) {
+            console.warn('No JSON structure found in text');
+            return [[], []];
         }
 
-        // Fallback: If no arrays found, return empty arrays
-        console.warn('No valid JSON arrays found in Gemini response');
-        return [[], []];
+        // Clean up common JSON syntax errors that AI might make
+        const cleanedJson = jsonStr
+            .replace(/\/\/.*$/gm, '') // Remove single line comments
+            .replace(/\/\*[\s\S]*?\*\//g, '') // Remove multi-line comments
+            .replace(/,(\s*[\]}])/g, '$1'); // Remove trailing commas
 
+        try {
+            const parsed = JSON.parse(cleanedJson);
+
+            // Handle if the response is an object { questions: [], skills: [] }
+            if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+                return [parsed.questions || [], parsed.skills || []];
+            }
+
+            // Handle if the response is an array of arrays [[questions], [skills]]
+            if (Array.isArray(parsed)) {
+                return [parsed[0] || [], parsed[1] || []];
+            }
+
+            return [[], []];
+        } catch (e) {
+            console.error('JSON Parse error after cleaning:', e.message);
+            return [[], []];
+        }
     } catch (error) {
         console.error('Error in extractJsonFromText:', error);
         return [[], []];
