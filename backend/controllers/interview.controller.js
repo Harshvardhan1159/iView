@@ -53,50 +53,56 @@ const createInterview = async (req, res) => {
     const InterviewHRCompany = req.hr.companyName;
     console.log(InterviewHRCompany);
 
-    // Send email to the interviewee
-    const mailOptions = {
-      from: process.env.Email_User,
-      to: intervieweeEmail,
-      subject: "Your Scheduled Interview on IView",
-      text:
-        `Dear ${intervieweeEmail},\n\n` +
-        `We are pleased to inform you that your interview has been successfully scheduled. Please find the details below:\n\n` +
-        `Company: ${InterviewHRCompany}\n` +
-        `Date: ${date}\n` +
-        `Time: ${time}\n` +
-        `Platform: IView\n\n` +
-        `To ensure a smooth interview process, we recommend joining 5–10 minutes before the scheduled time. Please make sure to have a stable internet connection. If you are not currently registered on IView, kindly register before the interview to be able to join the meeting.\n\n` +
-        `Should you have any questions or require assistance, do not hesitate to reply to this email.\n\n` +
-        `We wish you the best of luck with your interview!\n\n` +
-        `Best regards,\n` +
-        `Team IView`,
-    };
-
-    // Send the email to the candidate
-    await transporter.sendMail(mailOptions);
-    console.log(`Email sent successfully to ${intervieweeEmail}`);
-
-    // Send panelist invitation emails
-    for (const hr of panelistDocs) {
-      const panelistJoinLink = `http://localhost:5173/hr/interview/room/?interviewID=${newInterview._id}`;
-      const panelistMailOptions = {
+    // Send emails (non-blocking for the response)
+    try {
+      // Send email to the interviewee
+      const mailOptions = {
         from: process.env.Email_User,
-        to: hr.hrManager.email,
-        subject: "You've been added as a Panelist on IView",
+        to: intervieweeEmail,
+        subject: "Your Scheduled Interview on IView",
         text:
-          `Dear ${hr.hrManager.name},\n\n` +
-          `You have been invited as a panelist for an upcoming interview.\n\n` +
-          `Candidate: ${intervieweeEmail}\n` +
-          `Position: ${position}\n` +
+          `Dear ${intervieweeEmail},\n\n` +
+          `We are pleased to inform you that your interview has been successfully scheduled. Please find the details below:\n\n` +
           `Company: ${InterviewHRCompany}\n` +
           `Date: ${date}\n` +
-          `Time: ${time}\n\n` +
-          `Your join link (use this on the day of the interview):\n${panelistJoinLink}\n\n` +
+          `Time: ${time}\n` +
+          `Platform: IView\n\n` +
+          `To ensure a smooth interview process, we recommend joining 5–10 minutes before the scheduled time. Please make sure to have a stable internet connection. If you are not currently registered on IView, kindly register before the interview to be able to join the meeting.\n\n` +
+          `Should you have any questions or require assistance, do not hesitate to reply to this email.\n\n` +
+          `We wish you the best of luck with your interview!\n\n` +
           `Best regards,\n` +
           `Team IView`,
       };
-      await transporter.sendMail(panelistMailOptions);
-      console.log(`Panelist invitation sent to ${hr.hrManager.email}`);
+
+      await transporter.sendMail(mailOptions);
+      console.log(`Email sent successfully to ${intervieweeEmail}`);
+
+      // Send panelist invitation emails
+      const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+      for (const hr of panelistDocs) {
+        const panelistJoinLink = `${frontendUrl}/hr/interview/room/?interviewID=${newInterview._id}`;
+        const panelistMailOptions = {
+          from: process.env.Email_User,
+          to: hr.hrManager.email,
+          subject: "You've been added as a Panelist on IView",
+          text:
+            `Dear ${hr.hrManager.name},\n\n` +
+            `You have been invited as a panelist for an upcoming interview.\n\n` +
+            `Candidate: ${intervieweeEmail}\n` +
+            `Position: ${position}\n` +
+            `Company: ${InterviewHRCompany}\n` +
+            `Date: ${date}\n` +
+            `Time: ${time}\n\n` +
+            `Your join link (use this on the day of the interview):\n${panelistJoinLink}\n\n` +
+            `Best regards,\n` +
+            `Team IView`,
+        };
+        await transporter.sendMail(panelistMailOptions);
+        console.log(`Panelist invitation sent to ${hr.hrManager.email}`);
+      }
+    } catch (emailErr) {
+      console.error("Warning: Interview created but emails failed to send:", emailErr);
+      // We don't throw here, so the response is still 201
     }
 
     res.status(201).json(newInterview);
@@ -279,43 +285,49 @@ const startInterview = async (req, res) => {
     // Save the updated interview
     await interview.save();
 
-    // Send email to the candidate
-    const candidateJoinLink = `http://localhost:5173/user/interview/room/?interviewID=${interviewId}`;
-    const candidateMailOptions = {
-      from: process.env.Email_User,
-      to: interview.intervieweeEmail,
-      subject: "Your Interview Has Started on IView",
-      text:
-        `Dear ${interview.intervieweeEmail},\n\n` +
-        `Your interview has now started. Please join the interview using the link below:\n\n` +
-        `Join Link: ${candidateJoinLink}\n\n` +
-        `For a smooth interview experience, we recommend joining promptly and ensuring a stable internet connection. If you encounter any issues, feel free to reply to this email.\n\n` +
-        `We wish you the best of luck!\n\n` +
-        `Best regards,\n` +
-        `Team IView`,
-    };
-    await transporter.sendMail(candidateMailOptions);
-    console.log(`Email sent to candidate: ${interview.intervieweeEmail}`);
+    // Send emails (non-blocking for the response)
+    try {
+      const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+      // Send email to the candidate
+      const candidateJoinLink = `${frontendUrl}/user/interview/room/?interviewID=${interviewId}`;
+      const candidateMailOptions = {
+        from: process.env.Email_User,
+        to: interview.intervieweeEmail,
+        subject: "Your Interview Has Started on IView",
+        text:
+          `Dear ${interview.intervieweeEmail},\n\n` +
+          `Your interview has now started. Please join the interview using the link below:\n\n` +
+          `Join Link: ${candidateJoinLink}\n\n` +
+          `For a smooth interview experience, we recommend joining promptly and ensuring a stable internet connection. If you encounter any issues, feel free to reply to this email.\n\n` +
+          `We wish you the best of luck!\n\n` +
+          `Best regards,\n` +
+          `Team IView`,
+      };
+      await transporter.sendMail(candidateMailOptions);
+      console.log(`Email sent to candidate: ${interview.intervieweeEmail}`);
 
-    // Send join email to all panelists
-    if (interview.panelists && interview.panelists.length > 0) {
-      const panelistDocs = await HR.find({ _id: { $in: interview.panelists } });
-      const panelistJoinLink = `http://localhost:5173/hr/interview/room/?interviewID=${interviewId}`;
-      for (const hr of panelistDocs) {
-        const panelistMailOptions = {
-          from: process.env.Email_User,
-          to: hr.hrManager.email,
-          subject: "Interview Has Started — Join Now on IView",
-          text:
-            `Dear ${hr.hrManager.name},\n\n` +
-            `The interview for ${interview.intervieweeEmail} has started. Please join now using the link below:\n\n` +
-            `Join Link: ${panelistJoinLink}\n\n` +
-            `Best regards,\n` +
-            `Team IView`,
-        };
-        await transporter.sendMail(panelistMailOptions);
-        console.log(`Panelist join email sent to ${hr.hrManager.email}`);
+      // Send join email to all panelists
+      if (interview.panelists && interview.panelists.length > 0) {
+        const panelistDocs = await HR.find({ _id: { $in: interview.panelists } });
+        const panelistJoinLink = `${frontendUrl}/hr/interview/room/?interviewID=${interviewId}`;
+        for (const hr of panelistDocs) {
+          const panelistMailOptions = {
+            from: process.env.Email_User,
+            to: hr.hrManager.email,
+            subject: "Interview Has Started — Join Now on IView",
+            text:
+              `Dear ${hr.hrManager.name},\n\n` +
+              `The interview for ${interview.intervieweeEmail} has started. Please join now using the link below:\n\n` +
+              `Join Link: ${panelistJoinLink}\n\n` +
+              `Best regards,\n` +
+              `Team IView`,
+          };
+          await transporter.sendMail(panelistMailOptions);
+          console.log(`Panelist join email sent to ${hr.hrManager.email}`);
+        }
       }
+    } catch (emailErr) {
+      console.error("Warning: Interview started but emails failed to send:", emailErr);
     }
 
     res
