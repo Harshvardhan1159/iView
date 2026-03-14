@@ -2,7 +2,19 @@ const socketIO = require('socket.io');
 
 const io = new socketIO.Server({
   cors: {
-    origin: ["http://localhost:5173", "https://i-view.vercel.app"],
+    origin: function (origin, callback) {
+      const allowedOrigins = [
+        "http://localhost:5173",
+        "https://i-view.vercel.app",
+      ];
+      // Allow requests with no origin (mobile apps, Postman, etc.)
+      if (!origin) return callback(null, true);
+      // Allow if origin is in the list OR is a Vercel preview deployment
+      if (allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
+        return callback(null, true);
+      }
+      return callback(new Error("Not allowed by CORS"));
+    },
     methods: ['GET', 'POST'],
     credentials: true
   },
